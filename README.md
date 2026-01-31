@@ -124,3 +124,6 @@ Assembly OUT instruction
 Real hardware control using software
 
 DOS assembly program structure
+
+My project partner who was with me in the whole journey
+M. Shaheer Raza: https://github.com/M-Shaheer-Raza
