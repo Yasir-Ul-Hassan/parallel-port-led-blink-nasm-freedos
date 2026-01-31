@@ -1,0 +1,210 @@
+Blinking an LED Using PC Parallel Port (NASM + FreeDOS)
+Project Goal (In Simple Words)
+
+In this project, we make a small LED light turn ON and OFF using an old PC parallel port (LPT port) and assembly language.
+
+Normally, Windows blocks direct hardware control. So we use FreeDOS, which lets us control hardware directly.
+
+You will learn:
+
+How parallel port pins work
+
+How to connect LED safely
+
+How to write simple assembly code
+
+How to run it in FreeDOS
+
+Why Not Windows?
+
+Modern Windows (XP → Windows 11):
+
+Blocks direct hardware port access
+
+Needs special drivers
+
+Sometimes unstable
+
+FreeDOS:
+
+Allows direct hardware control
+
+No drivers needed
+
+Best for learning low-level hardware
+
+Understanding the Parallel Port
+4
+Important Points
+
+Parallel port has:
+
+8 Data Pins → D0 to D7 (Pins 2–9)
+
+Ground Pins → Example Pin 25
+
+Computer sends 0 or 1 (OFF or ON voltage).
+
+Example:
+
+Send 1 → Pin gives 5V → LED ON
+
+Send 0 → Pin gives 0V → LED OFF
+
+Default Address:
+
+LPT1 = 0x378
+
+LED Circuit (Very Important – Safety)
+4
+Parts Needed
+
+1 LED
+
+1 Resistor (220Ω – 330Ω recommended)
+
+Parallel port cable / DB25 connector
+
+Connection
+LED Leg	Connect To
+Long Leg (Anode)	Resistor → Pin 2
+Short Leg (Cathode)	Ground (Pin 25)
+Why Resistor?
+
+Without resistor:
+
+Too much current
+
+Can damage port
+
+Can burn LED
+
+Setting Up FreeDOS + NASM
+Step 1 — Install FreeDOS
+
+Download FreeDOS
+
+Make bootable USB
+
+Boot PC into FreeDOS
+
+Step 2 — Install NASM
+
+Copy NASM files into FreeDOS drive:
+
+C:\NASM
+
+
+Main file:
+
+NASM.EXE
+
+Writing Assembly Code
+Important Rule
+
+DOS programs start at:
+
+org 0x100
+
+Simple LED Blink Code
+org 0x100
+
+mov dx, 0x378     ; LPT1 port address
+
+mov al, 1         ; Turn LED ON
+out dx, al
+
+mov cx, 0FFFFh    ; Delay
+delay:
+loop delay
+
+mov al, 0         ; Turn LED OFF
+out dx, al
+
+mov ah, 4Ch       ; Exit program
+int 21h
+
+How Code Works (Super Simple)
+Code	Meaning
+mov dx,378h	Select parallel port
+mov al,1	Send ON signal
+out dx,al	Send signal to pin
+delay loop	Wait some time
+mov al,0	Send OFF signal
+Compile the Program
+
+In FreeDOS:
+
+nasm -f bin blink.asm -o blink.com
+
+Run Program
+blink
+
+
+LED should:
+
+Turn ON
+
+Wait
+
+Turn OFF
+
+If LED Not Working
+
+Check:
+
+Correct pin wiring
+
+Resistor connected
+
+Correct port address (0x378)
+
+FreeDOS booted (not Windows)
+
+What You Learned
+
+You learned:
+
+Hardware control using assembly
+
+Parallel port basics
+
+Real I/O port programming
+
+DOS assembly program structure
+
+Real Life Use Cases
+
+Same idea used in:
+
+Industrial control
+
+Embedded systems
+
+Microcontrollers (Arduino works same way)
+
+Old hardware automation
+
+Future Improvements
+
+You can:
+
+Blink LED continuously
+
+Control multiple LEDs
+
+Control relays
+
+Build small hardware projects
+
+Final Simple Summary
+
+If you remember only 4 things:
+
+Use FreeDOS (not Windows)
+
+Use port address 0x378
+
+Always use resistor with LED
+
+Use OUT instruction to control pins
